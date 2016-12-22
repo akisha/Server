@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Server {
 
     public static void main(String[] args) throws Throwable {
-        ServerSocket ss = new ServerSocket(7070);
+        ServerSocket ss = new ServerSocket(3090);
         while (true) {
             Socket s = ss.accept();
             new Thread(new SocketProcessor(s)).start();
@@ -50,11 +50,14 @@ public class Server {
             if (s2.length() > 0) {
                 fileName = s2.substring(1, s2.length());
             } else fileName = "";
+            fileName = "index.html";
+            System.out.println(s2);
             return fileName;
         }
 
         private void writeResponse(String s) throws Throwable {
-            String response = "HTTP/1.1 200 OK\r\n";
+            String response = "HTTP/1.1 200 OK\r\n" +
+                    "Connection: continue\r\n\r\n";
             String result = response + s;
             os.write(result.getBytes());
             os.flush();
