@@ -9,12 +9,11 @@ public class Server {
         ServerSocket ss = new ServerSocket(3090);
         while (true) {
             Socket s = ss.accept();
-            SocketProcessor sp = new SocketProcessor(s);
-            sp.start();
+            new Thread(new SocketProcessor(s)).start();
         }
     }
 
-    private static class SocketProcessor {
+    private static class SocketProcessor implements Runnable {
 
         private Socket s;
         private InputStream is;
@@ -52,7 +51,6 @@ public class Server {
                 fileName = s2.substring(1, s2.length());
             } else fileName = "";
             fileName = "index.htm";
-            System.out.println(fileName);
             return fileName;
         }
 
@@ -67,11 +65,18 @@ public class Server {
             os.flush();
         }
 
-        public void start() throws Throwable {
-            String out;
-            out = readText(readInputStream());
-            writeResponse(out);
-            s.close();
+        public void run() {
+            try {
+                String out = "";
+                out = readText(readInputStream());
+                writeResponse(out);
+            } catch (Throwable t) {
+            } finally {
+                try {
+                    s.close();
+                } catch (Throwable t) {
+                }
+            }
         }
     }
 }
