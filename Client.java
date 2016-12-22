@@ -5,10 +5,8 @@ import java.net.Socket;
 public class Client {
 
     public static void main(String[] args) throws IOException {
-        while (true) {
-            Socket c = new Socket(InetAddress.getByName("127.0.0.1"), 3090);
-            new Thread(new ClientP(c)).start();
-        }
+            Socket c = new Socket(InetAddress.getByName("localhost"), 3090);
+            new Thread(new ClientP(c)).run();
     }
 
     private static class ClientP implements Runnable{

@@ -57,7 +57,10 @@ public class Server {
 
         private void writeResponse(String s) throws Throwable {
             String response = "HTTP/1.1 200 OK\r\n" +
-                    "Connection: continue\r\n\r\n";
+                    "Server: Akimova\r\n" +
+                    "Content-Type: text/html\r\n" +
+                    "Content-Length: " + s.length() + "\r\n" +
+                    "Connection: close\r\n\r\n";
             String result = response + s;
             os.write(result.getBytes());
             os.flush();
